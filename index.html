@@ -6,9 +6,9 @@
 
   <meta charset="UTF-8">
 
-  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-  <title>Mon catalogue</title>
+  <title>Mon Catalogue</title>
 
   <style>
 
@@ -16,67 +16,111 @@
 
       font-family: Arial, sans-serif;
 
-      background: #f3f6fb;
-
-      color: #172554;
-
       margin: 0;
 
       padding: 20px;
 
+      background: #f4f4f4;
+
+      color: #222;
+
     }
 
-    h1 { text-align: center; }
+    h1 {
 
-    .produit, .panier {
+      text-align: center;
+
+    }
+
+    .produits {
+
+      display: grid;
+
+      grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+
+      gap: 20px;
+
+      max-width: 800px;
+
+      margin: 25px auto;
+
+    }
+
+    .produit {
 
       background: white;
 
-      border-radius: 14px;
+      border-radius: 12px;
 
-      padding: 16px;
+      padding: 15px;
 
-      margin: 12px 0;
+      text-align: center;
 
-      box-shadow: 0 2px 8px #00000010;
+      box-shadow: 0 2px 8px #0001;
 
     }
 
-    .prix { color: #1769e0; font-weight: bold; }
+    .produit img {
+
+      width: 100%;
+
+      height: 220px;
+
+      object-fit: contain;
+
+      border-radius: 8px;
+
+    }
 
     .quantite {
 
       display: flex;
 
+      justify-content: center;
+
       align-items: center;
 
       gap: 18px;
 
-      margin-top: 12px;
+      margin: 15px 0;
 
     }
 
     button {
 
-      border: 0;
+      font-size: 20px;
 
-      border-radius: 10px;
-
-      padding: 10px 16px;
-
-      background: #1769e0;
-
-      color: white;
-
-      font-size: 18px;
+      padding: 6px 14px;
 
       cursor: pointer;
 
+      border: 0;
+
+      border-radius: 8px;
+
+      background: #ddd;
+
     }
 
-    .quantite span { font-weight: bold; }
+    .prix {
 
-    #total { font-size: 24px; font-weight: bold; }
+      font-size: 20px;
+
+      font-weight: bold;
+
+    }
+
+    .total {
+
+      text-align: center;
+
+      font-size: 22px;
+
+      font-weight: bold;
+
+      margin: 25px auto;
+
+    }
 
   </style>
 
@@ -84,113 +128,107 @@
 
 <body>
 
-  <h1>Mon catalogue</h1>
+  <h1>Mon Catalogue</h1>
 
-  <p>Consultez les produits et choisissez les quantités.</p>
+  <div class="produits">
 
-  <div id="catalogue"></div>
+    <div class="produit">
 
-  <div class="panier">
+      <img src="produit1.jpg" alt="Photo du produit 1">
 
-    <h2>Mon récapitulatif</h2>
+      <h2>Produit 1</h2>
 
-    <div id="recap">Aucun article sélectionné.</div>
+      <div class="quantite">
 
-    <p>Total : <span id="total">0,00 €</span></p>
+        <button onclick="changer(0, -1)">−</button>
 
-    <button onclick="afficherRecap()">Voir mon récapitulatif</button>
+        <span id="q0">0</span>
+
+        <button onclick="changer(0, 1)">+</button>
+
+      </div>
+
+      <p class="prix" id="p0">0 €</p>
+
+    </div>
+
+    <div class="produit">
+
+      <img src="produit2.jpg" alt="Photo du produit 2">
+
+      <h2>Produit 2</h2>
+
+      <div class="quantite">
+
+        <button onclick="changer(1, -1)">−</button>
+
+        <span id="q1">0</span>
+
+        <button onclick="changer(1, 1)">+</button>
+
+      </div>
+
+      <p class="prix" id="p1">0 €</p>
+
+    </div>
+
+  </div>
+
+  <div class="total">
+
+    Total indicatif : <span id="total">0</span> €
 
   </div>
 
   <script>
 
-    const produits = [
+    const quantites = [0, 0];
 
-      { nom: "Article 1", prix: 40, quantite: 0 },
+    const tarifs = [
 
-      { nom: "Article 2", prix: 20, quantite: 0 },
+      {0: 0, 1: 40, 2: 75, 3: 100},
 
-      { nom: "Article 3", prix: 10, quantite: 0 }
+      {0: 0, 1: 35, 2: 60, 3: 80}
 
     ];
 
-    const euros = n => n.toLocaleString("fr-FR", {
+    function prixProduit(index) {
 
-      style: "currency", currency: "EUR"
+      const q = quantites[index];
 
-    });
+      if (q <= 3) return tarifs[index][q];
 
-    function afficherCatalogue() {
+      // Au-delà de 3, le tarif n'est pas défini.
 
-      document.getElementById("catalogue").innerHTML =
-
-        produits.map((p, i) => `
-
-          <div class="produit">
-
-            <h2>${p.nom}</h2>
-
-            <p class="prix">${euros(p.prix)}</p>
-
-            <div class="quantite">
-
-              <button onclick="modifier(${i}, -1)" aria-label="Retirer">−</button>
-
-              <span>${p.quantite}</span>
-
-              <button onclick="modifier(${i}, 1)" aria-label="Ajouter">+</button>
-
-            </div>
-
-          </div>
-
-        `).join("");
-
-      calculerTotal();
+      return null;
 
     }
 
-    function modifier(i, variation) {
+    function changer(index, variation) {
 
-      produits[i].quantite = Math.max(
+      const nouvelleQuantite = quantites[index] + variation;
 
-        0, produits[i].quantite + variation
+      if (nouvelleQuantite < 0 || nouvelleQuantite > 3) return;
 
-      );
+      quantites[index] = nouvelleQuantite;
 
-      afficherCatalogue();
+      document.getElementById("q" + index).textContent = nouvelleQuantite;
 
-    }
+      const prix = prixProduit(index);
 
-    function calculerTotal() {
+      document.getElementById("p" + index).textContent =
 
-      const total = produits.reduce(
+        prix === null ? "Tarif à confirmer" : prix + " €";
 
-        (s, p) => s + p.prix * p.quantite, 0
+      const total = quantites.reduce((somme, q, i) => {
 
-      );
+        return somme + (prixProduit(i) ?? 0);
 
-      document.getElementById("total").textContent = euros(total);
+      }, 0);
 
-    }
-
-    function afficherRecap() {
-
-      const selection = produits.filter(p => p.quantite > 0);
-
-      document.getElementById("recap").innerHTML = selection.length
-
-        ? selection.map(p =>
-
-            `${p.nom} × ${p.quantite} — ${euros(p.prix * p.quantite)}`
-
-          ).join("<br>")
-
-        : "Aucun article sélectionné.";
+      document.getElementById("total").textContent = total;
 
     }
-
-    afficherCatalogue();
 
   </script>
 
