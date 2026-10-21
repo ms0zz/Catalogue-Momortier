@@ -173,7 +173,25 @@
     </div>
 
   </div>
+<div class="produit">
 
+  <img src="Gatling 4.png" alt="Gatling Shooter 4">
+
+  <h2>Gatling Shooter 4</h2>
+
+  <div class="quantite">
+
+    <button onclick="changer(2, -1)">−</button>
+
+    <span id="q2">0</span>
+
+    <button onclick="changer(2, 1)">+</button>
+
+  </div>
+
+  <p class="prix" id="p2">0 €</p>
+
+</div>
   <div class="total">
 
     Total indicatif : <span id="total">0</span> €
@@ -182,15 +200,13 @@
 
   <script>
 
-    const quantites = [0, 0];
+    const quantites = [0, 0, 0];
 
     const tarifs = [
 
       {0: 0, 1: 40, 2: 75, 3: 100},
-
-      {0: 0, 1: 35, 2: 60, 3: 80}
-
-    ];
+      {0: 0, 1: 35, 2: 60, 3: 80];
+      {0: 0, 1: 60, 2: 100, 3: 150}
 
     function prixProduit(index) {
 
